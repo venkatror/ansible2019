@@ -1,0 +1,29 @@
+# https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-centos-6
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: install httpd
+      yum:
+        name: httpd
+        state: present
+    - name: start httpd 
+      service:
+        name: httpd
+        enabled: yes
+        state: latest
+    - name: install php packages
+      yum:
+        name: "{{ item }}"
+        state: present
+        with_items:
+          - php
+          - php-mysql
+    - name: restart apache2
+      service: 
+        name: httpd
+        state: restarted
+    #- name: create file
+     # file:
+      #  path: /var/www/html/info.php
+       # state: file
